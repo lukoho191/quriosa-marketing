@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quriosa – Wissen statt Kurzvideos</title>
+<meta name="description" content="Quriosa ist ein endloser Feed mit den besten Artikeln der Wikipedia. Wischen, staunen, weiterlesen. Kein Konto, keine Werbung, kein Tracking.">
+<meta name="theme-color" content="#09090c">
+<meta property="og:title" content="Quriosa – Wissen statt Kurzvideos">
+<meta property="og:description" content="Ein endloser Feed mit den besten Artikeln der Wikipedia. Kein Konto, keine Werbung, kein Tracking.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="img/og.jpg">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<style>
+  :root {
+    --bg: #09090c;
+    --surface: #15151b;
+    --surface-2: #1d1d25;
+    --line: rgba(255, 255, 255, .08);
+    --text: #f5f5f7;
+    --muted: #a1a1aa;
+    --lilac: #c9a7f5;
+    --gold: #ffd166;
+    --brand: linear-gradient(120deg, #7c3aed 0%, #c026d3 45%, #ec4899 75%, #fb923c 100%);
+    --serif: "New York", "Iowan Old Style", Charter, Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --rounded: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 18px/1.6 var(--sans);
+         -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: inherit; }
+  img { max-width: 100%; display: block; }
+  .wrap { width: min(1120px, 100% - 32px); margin-inline: auto; }
+
+  /* Header */
+  header { position: sticky; top: 0; z-index: 10; backdrop-filter: saturate(160%) blur(18px);
+           -webkit-backdrop-filter: saturate(160%) blur(18px); background: rgba(9, 9, 12, .72);
+           border-bottom: 1px solid var(--line); }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand img { width: 34px; height: 34px; border-radius: 9px; }
+  .wordmark { font: 800 24px/1 var(--rounded); letter-spacing: -.3px; }
+  .wordmark span { color: var(--lilac); }
+  .nav-links { display: flex; align-items: center; gap: 28px; font-size: 15px; color: var(--muted); }
+  .nav-links a { text-decoration: none; }
+  .nav-links a:hover { color: var(--text); }
+
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 999px;
+         font: 600 17px/1 var(--sans); text-decoration: none; white-space: nowrap; transition: transform .15s ease, box-shadow .15s ease; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: var(--brand); color: #fff; box-shadow: 0 10px 30px -8px rgba(192, 38, 211, .6); }
+  .btn-ghost { background: rgba(255, 255, 255, .07); color: var(--text); border: 1px solid var(--line); }
+  .btn-small { padding: 10px 18px; font-size: 15px; }
+  .btn svg { width: 20px; height: 20px; flex: none; }
+
+  /* Hero */
+  .hero { position: relative; padding: 88px 0 40px; overflow-x: clip; }
+  main { overflow-x: clip; }
+  .hero::before { content: ""; position: absolute; inset: -200px 0 auto; height: 900px; z-index: -1;
+                  background: radial-gradient(50% 50% at 75% 40%, rgba(192, 38, 211, .35), transparent 70%),
+                              radial-gradient(40% 40% at 20% 30%, rgba(124, 58, 237, .35), transparent 70%); }
+  .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px;
+             background: rgba(255, 255, 255, .06); border: 1px solid var(--line); font-size: 14px; font-weight: 600;
+             color: var(--muted); margin-bottom: 24px; }
+  .eyebrow b { color: var(--gold); }
+  h1 { font: 700 clamp(44px, 6.4vw, 76px)/1.02 var(--serif); letter-spacing: -1.5px; margin: 0 0 24px; }
+  h1 em { font-style: italic; background: var(--brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lead { font-size: clamp(18px, 2vw, 21px); color: #d4d4d8; max-width: 520px; margin: 0 0 36px; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+  .cta-note { font-size: 14px; color: var(--muted); margin-top: 16px; }
+
+  /* Phones */
+  .phone { position: relative; width: 280px; padding: 9px; border-radius: 52px; background: #0b0b0f;
+           box-shadow: 0 0 0 2px #2a2a33, 0 40px 80px -20px rgba(0, 0, 0, .8); flex: none; }
+  .phone img { border-radius: 44px; width: 100%; aspect-ratio: 1206 / 2622; object-fit: cover; }
+  .phone::after { content: ""; position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+                  width: 84px; height: 25px; border-radius: 13px; background: #000; }
+  .stack { position: relative; height: 640px; }
+  .stack .phone { position: absolute; top: 20px; left: 50%; }
+  .stack .p1 { transform: translateX(-118%) rotate(-7deg) scale(.86); opacity: .9; }
+  .stack .p3 { transform: translateX(18%) rotate(7deg) scale(.86); opacity: .9; }
+  .stack .p2 { transform: translateX(-50%); z-index: 2; }
+
+  /* Sections */
+  section { padding: 96px 0; }
+  .kicker { font-size: 14px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: var(--lilac); margin: 0 0 14px; }
+  h2 { font: 700 clamp(34px, 4.4vw, 52px)/1.08 var(--serif); letter-spacing: -1px; margin: 0 0 20px; }
+  .section-head { text-align: center; max-width: 680px; margin: 0 auto 56px; }
+  .section-head p { color: var(--muted); margin: 0; }
+
+  .feature { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; padding: 48px 0; }
+  .feature + .feature { border-top: 1px solid var(--line); }
+  .feature .media { display: flex; justify-content: center; position: relative; }
+  .feature .media::before { content: ""; position: absolute; width: 380px; height: 380px; top: 50%; left: 50%;
+                            transform: translate(-50%, -50%); border-radius: 50%; filter: blur(70px); opacity: .45;
+                            background: var(--glow, #7c3aed); }
+  .feature .phone { width: 300px; }
+  .feature:nth-child(even) .media { order: 2; }
+  .feature p { color: #c4c4cc; margin: 0 0 16px; max-width: 460px; }
+  .feature ul { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 10px; }
+  .feature li { display: flex; gap: 12px; align-items: flex-start; color: #d4d4d8; }
+  .feature li::before { content: ""; flex: none; width: 8px; height: 8px; margin-top: 10px; border-radius: 50%; background: var(--brand); }
+
+  /* Topics */
+  .topics { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; max-width: 900px; margin: 0 auto; }
+  .chip { display: inline-flex; align-items: center; gap: 10px; padding: 11px 18px 11px 12px; border-radius: 999px;
+          background: var(--surface); border: 1px solid var(--line); font-weight: 600; font-size: 16px; }
+  .chip i { width: 22px; height: 22px; border-radius: 50%; background: linear-gradient(135deg, var(--a), var(--b)); }
+
+  /* Privacy */
+  .privacy { background: linear-gradient(180deg, transparent, rgba(124, 58, 237, .08) 30%, rgba(124, 58, 237, .08) 70%, transparent); }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 28px; padding: 32px; }
+  .card .icon { width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; margin-bottom: 20px;
+                background: rgba(201, 167, 245, .12); color: var(--lilac); }
+  .card .icon svg { width: 26px; height: 26px; }
+  .card h3 { font-size: 21px; margin: 0 0 8px; }
+  .card p { color: var(--muted); margin: 0; font-size: 16px; }
+
+  /* FAQ */
+  .faq { max-width: 760px; margin: 0 auto; }
+  details { border-bottom: 1px solid var(--line); padding: 22px 0; }
+  summary { cursor: pointer; font-weight: 600; font-size: 19px; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; font-size: 26px; line-height: 1; color: var(--lilac); transition: transform .2s; }
+  details[open] summary::after { transform: rotate(45deg); }
+  details p { color: var(--muted); margin: 12px 0 0; }
+
+  /* Final CTA */
+  .final { text-align: center; }
+  .final-box { position: relative; overflow: hidden; border-radius: 40px; padding: 72px 24px; background: var(--surface);
+               border: 1px solid var(--line); }
+  .final-box::before { content: ""; position: absolute; inset: 0; background: var(--brand); opacity: .18; }
+  .final-box > * { position: relative; }
+  .final-box img { width: 112px; height: 112px; border-radius: 26px; margin: 0 auto 28px;
+                   box-shadow: 0 20px 50px -10px rgba(192, 38, 211, .6); }
+  .final-box p { color: #d4d4d8; max-width: 520px; margin: 0 auto 32px; }
+
+  footer { padding: 48px 0 64px; color: var(--muted); font-size: 14px; }
+  .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; border-top: 1px solid var(--line); padding-top: 32px; }
+  .foot nav { display: flex; gap: 24px; flex-wrap: wrap; }
+  .foot a { text-decoration: none; }
+  .foot a:hover { color: var(--text); }
+  .foot small { display: block; max-width: 520px; line-height: 1.5; }
+
+  @media (max-width: 900px) {
+    .nav-links a:not(.btn) { display: none; }
+    .hero { padding-top: 56px; }
+    .hero-grid { grid-template-columns: 1fr; text-align: center; }
+    .lead { margin-inline: auto; }
+    .cta-row { justify-content: center; }
+    .stack { height: 520px; }
+    .stack .phone { width: 230px; }
+    .feature { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+    .feature:nth-child(even) .media { order: 0; }
+    .feature p { margin-inline: auto; }
+    .feature ul { justify-items: center; }
+    .feature .phone { width: 260px; }
+    .cards { grid-template-columns: 1fr; }
+    section { padding: 72px 0; }
+  }
+  @media (max-width: 480px) {
+    .stack { height: 440px; }
+    .stack .phone { width: 190px; border-radius: 38px; padding: 7px; }
+    .stack .phone img { border-radius: 32px; }
+    .stack .phone::after { top: 15px; width: 58px; height: 18px; }
+    .stack .p1 { transform: translateX(-112%) rotate(-7deg) scale(.82); }
+    .stack .p3 { transform: translateX(12%) rotate(7deg) scale(.82); }
+    .btn { padding: 13px 20px; }
+  }
+  @media (max-width: 400px) {
+    .brand img { width: 30px; height: 30px; }
+    .wordmark { font-size: 21px; }
+    .btn-small { padding: 9px 14px; font-size: 14px; }
+    .eyebrow { font-size: 12px; padding: 6px 12px; }
+    h1 { font-size: 38px; letter-spacing: -1px; }
+    .btn { font-size: 16px; padding: 12px 18px; }
+    .stack .phone { width: 160px; }
+    .stack { height: 380px; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#" aria-label="Quriosa Startseite">
+      <img src="img/icon-256.png" alt="">
+      <span class="wordmark">quri<span>osa</span></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#funktionen">Funktionen</a>
+      <a href="#privat">Privatsphäre</a>
+      <a href="#fragen">Fragen</a>
+      <a class="btn btn-primary btn-small" href="#testen">Jetzt testen</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow"><b>★</b> Die besten Artikel der Wikipedia</span>
+        <h1>Scrollen. Aber diesmal bleibt <em>was hängen.</em></h1>
+        <p class="lead">Quriosa ist ein endloser Feed wie in deinen Lieblings-Video-Apps, nur mit spannenden Wikipedia-Artikeln statt Kurzvideos. Wischen, staunen, weiterlesen.</p>
+        <div class="cta-row">
+          <!-- Öffentlichen TestFlight-Link hier eintragen -->
+          <a class="btn btn-primary" href="https://testflight.apple.com/join/B9xH25vD">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+            Beta mit TestFlight testen
+          </a>
+          <a class="btn btn-ghost" href="#funktionen">Mehr erfahren</a>
+        </div>
+        <p class="cta-note">Kostenlose Beta · für iPhone mit iOS 26 · bald im App Store</p>
+      </div>
+      <div class="stack" aria-hidden="true">
+        <div class="phone p1"><img src="img/voght_saved.jpg" alt=""></div>
+        <div class="phone p2"><img src="img/munch_saved.jpg" alt=""></div>
+        <div class="phone p3"><img src="img/feed8.jpg" alt=""></div>
+      </div>
+    </div>
+  </div>
+
+  <section id="funktionen">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">So funktioniert's</p>
+        <h2>Ein Artikel pro Bildschirm. Endlos neugierig.</h2>
+        <p>Großes Bild, das Wichtigste auf einen Blick. Interessiert dich etwas, tippst du auf „Weiterlesen“. Wenn nicht, wischst du einfach weiter.</p>
+      </div>
+
+      <div class="feature" style="--glow:#f59e0b">
+        <div class="media"><div class="phone"><img src="img/voght_saved.jpg" alt="Feed mit dem Artikel über Caspar Voght, markiert als exzellent" loading="lazy"></div></div>
+        <div>
+          <p class="kicker">Nur das Beste</p>
+          <h2>Ausgezeichnete Artikel statt Zufallsfunde</h2>
+          <p>Dein Feed besteht vor allem aus Artikeln, die die Wikipedia-Community als <strong>exzellent</strong> oder <strong>lesenswert</strong> ausgezeichnet hat. Dazwischen warten Überraschungen und jeden Tag der Artikel des Tages.</p>
+          <ul>
+            <li>Wie viel Zufall du willst, stellst du selbst ein</li>
+            <li>Lesezeit auf einen Blick</li>
+            <li>Deutsch oder Englisch</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feature" style="--glow:#6366f1">
+        <div class="media"><div class="phone"><img src="img/reader.jpg" alt="Leseansicht des Artikels Melancholie von Edvard Munch" loading="lazy"></div></div>
+        <div>
+          <p class="kicker">Lesen ohne Ablenkung</p>
+          <h2>Neugierig? Einfach weiterlesen.</h2>
+          <p>Ganze Artikel öffnen sich direkt in der App, in einer ruhigen Leseansicht im Stil von Quriosa. Ohne Werbebanner, ohne Pop-ups, ohne Umweg über den Browser.</p>
+          <ul>
+            <li>Schriftgröße nach Wunsch</li>
+            <li>Links führen zum nächsten Kaninchenbau</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feature" style="--glow:#ec4899">
+        <div class="media"><div class="phone"><img src="img/saved.jpg" alt="Sammlung gespeicherter Artikel mit Bildern" loading="lazy"></div></div>
+        <div>
+          <p class="kicker">Deine Sammlung</p>
+          <h2>Speichern und offline lesen</h2>
+          <p>Ein Doppeltipp, und der Artikel landet in deiner Sammlung. Gespeicherte Artikel kannst du durchsuchen und auch ohne Internet lesen, im Flugzeug genauso wie in der U-Bahn.</p>
+        </div>
+      </div>
+
+      <div class="feature" style="--glow:#0ea5e9">
+        <div class="media"><div class="phone"><img src="img/topics.jpg" alt="Themenliste mit Interessen-Balken" loading="lazy"></div></div>
+        <div>
+          <p class="kicker">Personalisiert, aber privat</p>
+          <h2>Dein Feed lernt dich kennen</h2>
+          <p>Quriosa merkt sich, was du speicherst, liest und überspringst, und zeigt dir mehr davon. Damit es nicht einseitig wird, mischen wir immer wieder Neues unter. Und alles passiert nur auf deinem iPhone.</p>
+          <ul>
+            <li>„Weniger davon“ mit einem Tipp</li>
+            <li>Themen einzeln ausblenden</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">15 Themen</p>
+        <h2>Von Weltall bis Essen &amp; Trinken</h2>
+        <p>Was dich nicht interessiert, blendest du aus. Alles andere mischt Quriosa zu deinem persönlichen Feed.</p>
+      </div>
+      <div class="topics">
+        <span class="chip" style="--a:#f59e0b;--b:#b45309"><i></i>Geschichte</span>
+        <span class="chip" style="--a:#22d3ee;--b:#2563eb"><i></i>Wissenschaft</span>
+        <span class="chip" style="--a:#84cc16;--b:#047857"><i></i>Natur</span>
+        <span class="chip" style="--a:#818cf8;--b:#1e1b4b"><i></i>Weltall</span>
+        <span class="chip" style="--a:#ec4899;--b:#7c3aed"><i></i>Kunst &amp; Architektur</span>
+        <span class="chip" style="--a:#d946ef;--b:#e11d48"><i></i>Musik &amp; Bühne</span>
+        <span class="chip" style="--a:#fb923c;--b:#dc2626"><i></i>Bücher &amp; Film</span>
+        <span class="chip" style="--a:#38bdf8;--b:#0f766e"><i></i>Technik</span>
+        <span class="chip" style="--a:#2dd4bf;--b:#0369a1"><i></i>Orte</span>
+        <span class="chip" style="--a:#a78bfa;--b:#4c1d95"><i></i>Philosophie &amp; Religion</span>
+        <span class="chip" style="--a:#facc15;--b:#ea580c"><i></i>Gesellschaft</span>
+        <span class="chip" style="--a:#fda4af;--b:#be185d"><i></i>Menschen</span>
+        <span class="chip" style="--a:#4ade80;--b:#15803d"><i></i>Sport</span>
+        <span class="chip" style="--a:#f87171;--b:#9f1239"><i></i>Medizin</span>
+        <span class="chip" style="--a:#fdba74;--b:#c2410c"><i></i>Essen &amp; Trinken</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="privat" class="privacy">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">Privatsphäre</p>
+        <h2>Kein Konto. Keine Werbung. Kein Tracking.</h2>
+        <p>App öffnen und loslegen. Was Quriosa über deine Interessen lernt, verlässt nie dein iPhone.</p>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/><path d="M3 3l18 18"/></svg></div>
+          <h3>Kein Konto</h3>
+          <p>Keine Anmeldung, keine E-Mail-Adresse, kein Onboarding. Du öffnest die App und bist sofort drin.</p>
+        </div>
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M12 18h.01"/></svg></div>
+          <h3>Lernt nur auf deinem Gerät</h3>
+          <p>Deine Interessen, Einstellungen und gespeicherten Artikel bleiben auf deinem iPhone. Es gibt keinen Server von uns.</p>
+        </div>
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg></div>
+          <h3>Keine Werbung, kein Tracking</h3>
+          <p>Keine Analyse-Tools, keine Werbenetzwerke, keine Drittanbieter-Bibliotheken. Nur du und die Artikel.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="fragen">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">Fragen</p>
+        <h2>Gut zu wissen</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>Woher kommen die Artikel?</summary>
+          <p>Alle Inhalte stammen von den Autorinnen und Autoren der Wikipedia und stehen unter der Lizenz CC BY-SA 4.0. Quriosa lädt sie direkt von Wikipedia. Quriosa ist ein unabhängiges Projekt und nicht mit der Wikimedia Foundation verbunden.</p>
+        </details>
+        <details>
+          <summary>Welche Geräte werden unterstützt?</summary>
+          <p>Quriosa läuft auf iPhones mit iOS 26 oder neuer.</p>
+        </details>
+        <details>
+          <summary>In welchen Sprachen gibt es Quriosa?</summary>
+          <p>Der Feed kommt wahlweise aus der deutschen oder der englischen Wikipedia. Du wechselst in den Einstellungen.</p>
+        </details>
+        <details>
+          <summary>Wie kann ich die Beta testen?</summary>
+          <p>Installiere die kostenlose App TestFlight aus dem App Store und öffne dann unseren Einladungslink auf deinem iPhone. Ein Entwickler-Account ist nicht nötig, nur deine normale Apple-ID.</p>
+        </details>
+        <details>
+          <summary>Was passiert mit meinen Daten?</summary>
+          <p>Quriosa speichert alles lokal auf deinem iPhone. Um Artikel und Bilder zu laden, verbindet sich die App direkt mit Wikipedia. Details findest du in der <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section id="testen" class="final">
+    <div class="wrap">
+      <div class="final-box">
+        <img src="img/icon-256.png" alt="Quriosa App-Icon">
+        <h2>Bereit für deinen nächsten Kaninchenbau?</h2>
+        <p>Teste Quriosa jetzt kostenlos über TestFlight und hilf uns mit deinem Feedback, die App besser zu machen.</p>
+        <a class="btn btn-primary" href="https://testflight.apple.com/join/B9xH25vD">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+          Beta mit TestFlight testen
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <span class="wordmark">quri<span>osa</span></span>
+      <small style="margin-top:12px">Inhalte: Wikipedia, CC BY-SA 4.0. Quriosa ist ein unabhängiges Projekt und nicht mit der Wikimedia Foundation verbunden. Apple, iPhone und TestFlight sind Marken der Apple Inc.</small>
+    </div>
+    <nav>
+      <a href="datenschutz.html">Datenschutz</a>
+      <a href="impressum.html">Impressum</a>
+      <a href="mailto:quriosa@protonmail.com">Kontakt</a>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
